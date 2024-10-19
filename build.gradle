@@ -1,0 +1,52 @@
+group 'com.orangehrmlive' // Grupo del proyecto
+version '1.0-SNAPSHOT' // Versión del proyecto
+
+repositories { // Repositorios para buscar dependencias
+    mavenCentral() // Repositorio central de Maven
+    mavenLocal() // Repositorio local de Maven
+    jcenter() // Repositorio JCenter
+}
+
+buildscript { // Configuración del script de construcción
+    repositories { // Repositorios para dependencias de construcción
+        mavenLocal() // Repositorio local de Maven
+        jcenter() // Repositorio JCenter
+    }
+
+    dependencies { // Dependencias para el script de construcción
+        classpath "net.serenity-bdd:serenity-gradle-plugin:2.1.4" // Plugin de Serenity
+    }
+}
+
+apply plugin: 'java' // Aplica el plugin de Java
+apply plugin: 'idea' // Aplica el plugin para IntelliJ IDEA
+apply plugin: 'net.serenity-bdd.aggregator' // Aplica el plugin de Serenity
+
+sourceCompatibility = 1.8 // Compatibilidad con Java 8
+targetCompatibility = 1.8 // Compatibilidad con Java 8
+
+ext { // Propiedades extendidas
+    serenityVersion = '3.6.12' // Versión de Serenity
+    serenityCucumberVersion = '3.6.12' // Versión de Serenity para Cucumber
+    poiVersion = '3.17' // Versión de Apache POI para manejar Excel
+}
+
+dependencies { // Dependencias del proyecto
+    testImplementation "io.github.bonigarcia:webdrivermanager:5.5.3" // Gestor de controladores de navegador
+    implementation "net.serenity-bdd:serenity-rest-assured:$serenityVersion" // Pruebas de API REST
+    implementation "net.serenity-bdd:serenity-core:$serenityVersion" // Dependencia principal de Serenity
+    implementation "net.serenity-bdd:serenity-junit:$serenityVersion" // Integración con JUnit
+    implementation "net.serenity-bdd:serenity-screenplay:$serenityVersion" // Integración con Screenplay
+    implementation "net.serenity-bdd:serenity-cucumber:$serenityCucumberVersion" // Integración con Cucumber
+    implementation "org.apache.poi:poi:$poiVersion" // Manipulación de archivos Excel (XLS)
+    implementation "org.apache.poi:poi-ooxml:$poiVersion" // Manipulación de archivos Excel (XLSX)
+}
+
+test { // Configuración para la tarea de pruebas
+    useJUnit { // Usar JUnit para las pruebas
+        include "**/*" // Incluir todas las pruebas
+        gradle.startParameter.continueOnFailure = true // Continuar en caso de fallos
+        testLogging.showStandardStreams = true // Mostrar flujos estándar durante la ejecución
+        systemProperties System.getProperties() // Pasar propiedades del sistema
+    }
+}
